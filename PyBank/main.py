@@ -2,7 +2,6 @@
 import csv
 import os
 import numpy as np
-from numpy import complex64, longlong
 
 budget_csv = os.path.join("Resources", "budget_data.csv")
 
@@ -13,47 +12,65 @@ with open(budget_csv, "r") as csv_file:
     # Skip the header
     csv_header = next(csv_reader)
 
+# Find the total number of months
 # Count number of rows
     file = open(budget_csv)
     csv_reader = csv.reader(csv_file, delimiter = ",")
-    num_rows = 0
+    num_rows = -1
 
     for row in open(budget_csv):
         num_rows = num_rows + 1
 
-# Print total months
-print("Total months: ", num_rows)
+    # Print total months
+    # print("Total months: ", num_rows)
 
 #   * The net total amount of "Profit/Losses" over the entire period
 
-total_profit_losses = 0
+    date = []
+    profit_loses = []
+    for row in csv_reader:
+        date.append(row[0])
+        profit_loses.append(int(row[1]))
 
+    profit_losses_total = (sum(profit_loses))
 
-
-# for row in open(budget_csv):
-#     total_Profit_Losses += float(row[1])
-
-#     print(float("Total: {total_Profit_Losses}"))
-
-# for row in open(budget_csv):
-#     total_profit_losses += float(0)
-
-# print(float("Total: ", total_profit_losses))
-
+    # print(f'Total: ${profit_losses_total}')
+    
 
 #   * Calculate the changes in "Profit/Losses" over the entire period, then find the average of those changes
 
-average_profit_losses = 0
+    avg_change = round((profit_loses[-1] - profit_loses[0])/num_rows, 2)
+    # print (f'Average Change ${avg_change}')
 
 #   * The greatest increase in profits (date and amount) over the entire period
 
-increase_profit = 0
-increase_profit_month = ""
+    greatest_increase = max(profit_loses)
+    increase_indexing = profit_loses.index(greatest_increase)
+    profit_increase = date[increase_indexing]
+
+    # print(f'Greatest Increase in Profits: {profit_increase} (${greatest_increase})')
 
 #   * The greatest decrease in profits (date and amount) over the entire period
 
-decrease_profit = 0
-decrease_profit_month = ""
+    greatest_decrease = min(profit_loses)
+    decrease_indexing = profit_loses.index(greatest_decrease)
+    profit_decrease = date[decrease_indexing]
+
+    # print(f'Greatest Decrease in Profits: {profit_decrease} (${greatest_decrease})')
+
+print ("----------------------------")
+print ("Financial Analysis")
+print ("----------------------------")
+print ("Total months: ", num_rows)
+print ("----------------------------")
+print ("print(f'Total: ${profit_losses_total}')")
+print ("----------------------------")
+print (f'Average Change ${avg_change}')
+print ("----------------------------")
+print (f'Greatest Increase in Profits: {profit_increase} (${greatest_increase})')
+print ("----------------------------")
+print(f'Greatest Decrease in Profits: {profit_decrease} (${greatest_decrease})')
+print ("----------------------------")
 
 # * As an example, your analysis should look similar to the one below:
 
@@ -68,3 +85,21 @@ decrease_profit_month = ""
 #   ```
 
 # In addition, your final script should both print the analysis to the terminal and export a text file with the results
+
+export_to_terminal = os.path.join("analysis", "bank.budget.txt")
+f = open (export_to_terminal, "w")
+f.write ("----------------------------")
+f.write ("\n")
+f.write ("Financial Analysis")
+f.write ("\n")
+f.write ("Total months:  {num_rows}")
+f.write ("\n")
+f.write ((f'Total: ${profit_losses_total}'))
+f.write ("\n")
+f.write (f'Average Change ${avg_change}')
+f.write ("\n")
+f.write (f'Greatest Increase in Profits: {profit_increase} (${greatest_increase})')
+f.write ("\n")
+f.write (f'Greatest Decrease in Profits: {profit_decrease} (${greatest_decrease})')
+f.write ("\n")
+f.write ("----------------------------")
