@@ -27,45 +27,50 @@ with open(budget_csv, "r") as csv_file:
 #   * The net total amount of "Profit/Losses" over the entire period
 
     date = []
-    profit_loses = []
+    profit_losses = []
     for row in csv_reader:
         date.append(row[0])
-        profit_loses.append(int(row[1]))
+        profit_losses.append(int(row[1]))
 
-    profit_losses_total = (sum(profit_loses))
+    profit_losses_total = (sum(profit_losses))
 
-    # print(f'Total: ${profit_losses_total}')
+    ## print(f'Total: ${profit_losses_total}')
     
 
 #   * Calculate the changes in "Profit/Losses" over the entire period, then find the average of those changes
+    avg_change = []
+    for i in range(len(profit_losses)-1):
+        avg_change.append(profit_losses[i+1]-profit_losses[i])
 
-    avg_change = round((profit_loses[-1] - profit_loses[0])/num_rows, 2)
+    # print(f'Average Change ${round(sum(avg_change)/len(avg_change),2)}')
+    
+    # avg_change = round((profit_loses[-1] - profit_loses[0])/num_rows, 2)
     # print (f'Average Change ${avg_change}')
 
 #   * The greatest increase in profits (date and amount) over the entire period
 
-    greatest_increase = max(profit_loses)
-    increase_indexing = profit_loses.index(greatest_increase)
-    profit_increase = date[increase_indexing]
+    greatest_increase = max(avg_change)
+    increase_indexing = avg_change.index(greatest_increase)
+    profit_increase = date[increase_indexing + 1]
 
     # print(f'Greatest Increase in Profits: {profit_increase} (${greatest_increase})')
 
 #   * The greatest decrease in profits (date and amount) over the entire period
 
-    greatest_decrease = min(profit_loses)
-    decrease_indexing = profit_loses.index(greatest_decrease)
-    profit_decrease = date[decrease_indexing]
+    greatest_decrease = min(avg_change)
+    decrease_indexing = avg_change.index(greatest_decrease)
+    profit_decrease = date[decrease_indexing + 1]
 
     # print(f'Greatest Decrease in Profits: {profit_decrease} (${greatest_decrease})')
 
 print ("----------------------------")
 print ("Financial Analysis")
 print ("----------------------------")
-print ("Total months: ", num_rows)
+print ("Total Months: ", num_rows)
 print ("----------------------------")
-print ("print(f'Total: ${profit_losses_total}')")
+print (f'Total: ${profit_losses_total}')
 print ("----------------------------")
-print (f'Average Change ${avg_change}')
+print (f'Average Change ${round(sum(avg_change)/len(avg_change),2)}')
 print ("----------------------------")
 print (f'Greatest Increase in Profits: {profit_increase} (${greatest_increase})')
 print ("----------------------------")
